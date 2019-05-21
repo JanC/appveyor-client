@@ -1094,8 +1094,8 @@ class Deployments(_Base):
 
 class BuildJobs(_Base):
     """
-    Appveyor deployment api methods.
-
+    Appveyor build jobs api methods.
+    
     https://www.appveyor.com/docs/api/samples/download-artifacts-ps/
     """
 
@@ -1116,10 +1116,17 @@ class BuildJobs(_Base):
                     "created": "2019-05-21T17:19:46.2713142+00:00"
                 }
             ]
-        Get artifacts.
+        Get the list of artifacts.
 
-        https://www.appveyor.com/docs/api/samples/download-artifacts-ps/
         """
         method_url = 'GET /api/buildjobs/{job_id}/artifacts'
         method_url = method_url.format(job_id=job_id)
-        return self._client._request(method_url)   
+        return self._client._request(method_url)     
+
+    def artifact_url(self, job_id, file_name):
+        """
+        Returns the download URL of the artifact without downloading it
+        """
+        url = '/api/buildjobs/{job_id}/artifacts/{file_name}'
+        url = url.format(job_id=job_id, file_name=file_name)
+        return self._client._make_url(url)
