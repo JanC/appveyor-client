@@ -48,6 +48,7 @@ class AppveyorClient(object):
         self.roles = Roles(self)
         self.projects = Projects(self)
         self.builds = Builds(self)
+        self.buildjobs = BuildJobs(self)
         self.environments = Environments(self)
         self.deployments = Deployments(self)
 
@@ -1090,3 +1091,35 @@ class Deployments(_Base):
         data = {"deploymentId": deployment_id}
         body = json.dumps(data)
         return self._client._request(method_url, body=body)
+
+class BuildJobs(_Base):
+    """
+    Appveyor deployment api methods.
+
+    https://www.appveyor.com/docs/api/samples/download-artifacts-ps/
+    """
+
+    def artifacts(self, job_id):
+        """
+        ::
+            [
+                {
+                    "fileName": "foo/bar/64/win.xpl",
+                    "type": "File",
+                    "size": 594944,
+                    "created": "2019-05-21T17:19:45.2243502+00:00"
+                },
+                {
+                    "fileName": "foo/bar/win.xpl",
+                    "type": "File",
+                    "size": 465920,
+                    "created": "2019-05-21T17:19:46.2713142+00:00"
+                }
+            ]
+        Get artifacts.
+
+        https://www.appveyor.com/docs/api/samples/download-artifacts-ps/
+        """
+        method_url = 'GET /api/buildjobs/{job_id}/artifacts'
+        method_url = method_url.format(job_id=job_id)
+        return self._client._request(method_url)   
